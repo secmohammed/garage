@@ -5,4 +5,5 @@ npm-debug.*
 *.p12
 *.key
 /server/node_modules/**/*
+/client/node_modules/**/*
 *.mobileprovision

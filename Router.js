@@ -14,6 +14,7 @@ const RouterComponent = () => {
           key="service"
           title="select a service"
           hideNavBar={true}
+          initial
         />
         <Scene
           component={DriverToUserMap}
@@ -21,13 +22,7 @@ const RouterComponent = () => {
           title="Map"
           hideNavBar={true}
         />
-        <Scene
-          component={Map}
-          key="map"
-          title="Map"
-          hideNavBar={true}
-          initial
-        />
+        <Scene component={Map} key="map" title="Map" hideNavBar={true} />
       </Scene>
     </Router>
   );

@@ -23,7 +23,7 @@ import {
   activeEmergencyExpires
 } from "../actions";
 import moment from "moment";
-const GOOGLE_MAPS_APIKEY = "AIzaSyAqQZukuqiPG12VkNYG0JWLf6jXa8bqPfU";
+const GOOGLE_MAPS_APIKEY = "AIzaSyB9-6jIkdA6mjeB9VGwsi1peGI16GWDG1s";
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
 class MapScreen extends Component {
@@ -38,6 +38,8 @@ class MapScreen extends Component {
   map = null;
 
   state = {
+    duration: 0,
+    distance: 0,
     mapLoaded: false,
     region: {
       latitude: 30.023902,
@@ -184,6 +186,8 @@ class MapScreen extends Component {
     return (
       <View style={styles.container}>
         <MapView
+          minZoomLevel={10}
+          zoomEnabled={true}
           ref={map => {
             this.map = map;
           }}
@@ -194,7 +198,7 @@ class MapScreen extends Component {
           showsMyLocationButton={true}
           style={styles.map}
           onRegionChange={this.onRegionChangeComplete}
-          region={this.state.region}
+          initialRegion={this.state.region}
         >
           <MapViewDirections
             origin={this.state.region}
@@ -215,8 +219,8 @@ class MapScreen extends Component {
             }}
             onReady={result => {
               if (result && result.distance && result.duration) {
-                console.log(`Distance: ${result.distance} km`);
-                console.log(`Duration: ${result.duration} min.`);
+                this.state.distance = result.distance;
+                this.state.duration = result.duration;
                 this.map.fitToCoordinates(result.coordinates, {
                   edgePadding: {
                     right: width / 20,
@@ -229,55 +233,37 @@ class MapScreen extends Component {
               }
             }}
           />
-          <MapView.Marker.Animated
-            coordinate={this.state.region}
-            draggable
-            onSelect={() => console.log("onSelect", arguments)}
-            onDrag={() => console.log("onDrag", arguments)}
-            onDragStart={() => console.log("onDragStart", arguments)}
-          />
+          <MapView.Marker.Animated coordinate={this.state.region} draggable />
           {this.state.nearbyMarkers.map((marker, index) => (
             <MapView.Marker coordinate={marker} title="Hello" key={index} />
           ))}
         </MapView>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "flex-end",
+            width: "100%",
+            backgroundColor: "#FFF",
+            height: "30%"
+          }}
+        >
+          <View
+            style={{
+              justifyContent: "center",
+              height: "25%",
+              borderBottomColor: "#CCC",
+              borderBottomWidth: 1,
+              alignItems: "center"
+            }}
+          >
+            <Text
+              style={{ fontSize: 10 }}
+            >{`Your driver is ${this.state.distance}km away from you, driver will reach you out in ${this.state.duration}mins`}</Text>
+          </View>
+        </View>
       </View>
     );
   }
-  // render() {
-  //   if (!this.state.mapLoaded) {
-  //     return (
-  //       <View style={{ flex: 1, justifyContent: "center" }}>
-  //         <ActivityIndicator size="large" />
-  //       </View>
-  //     );
-  //   }
-
-  //   return (
-  //     <View style={{ flex: 1 }}>
-  //       <MapView
-  //         region={this.state.region}
-  //         showsTraffic={true}
-  //         style={{ flex: 1 }}
-  //         showsMyLocationButton={true}
-  //         showsUserLocation={true}
-  //         onRegionChangeComplete={this.onRegionChangeComplete}
-  //       >
-  //         {this.props.map.nearbyUsers.map((user, index) => {
-  //           return (
-  //             <MapView.Marker
-  //               key={index}
-  //               coordinate={{
-  //                 latitude: user.location.lat,
-  //                 longitude: user.location.lng
-  //               }}
-  //             />
-  //           );
-  //         })}
-  //       </MapView>
-  //       {this.renderRequestOrTimeout()}
-  //     </View>
-  //   );
-  // }
 }
 const styles = StyleSheet.create({
   container: {

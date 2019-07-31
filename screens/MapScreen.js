@@ -40,8 +40,8 @@ class MapScreen extends Component {
   state = {
     mapLoaded: false,
     region: {
-      latitude: 30.023902,
-      longitude: 31.30145,
+      latitude: 26.629752999999965,
+      longitude: 30.761726000000067,
       latitudeDelta: 0,
       longitudeDelta: 0
     },
@@ -58,28 +58,34 @@ class MapScreen extends Component {
     this.setState({ region });
     setTimeout(() => this.map.animateToRegion(region), 10);
   };
-  getCurrentPosition = () => {
-    try {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const region = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: 0,
-            longitudeDelta: 0
-          };
-          this.setRegion(region);
-        },
-        error => {
-          //TODO: better design
-          switch (error.code) {
-            case 1:
-              alert(error);
+  getCurrentPosition = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== "denied") {
+      try {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const region = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              latitudeDelta: 0,
+              longitudeDelta: 0
+            };
+            this.setRegion(region);
+          },
+          error => {
+            //TODO: better design
+            switch (error.code) {
+              case 1:
+                alert(error);
+            }
+          },
+          {
+            enableHighAccuracy: true
           }
-        }
-      );
-    } catch (e) {
-      alert(e.message || "");
+        );
+      } catch (e) {
+        alert(e.message || "");
+      }
     }
   };
 
@@ -194,7 +200,7 @@ class MapScreen extends Component {
           onRegionChange={this.onRegionChangeComplete}
           initialRegion={this.state.region}
         >
-          <MapView.Marker coordinate={this.state.region} />
+          <MapView.Marker.Animated coordinate={this.state.region} draggable />
           {this.props.map.nearbyUsers.map((user, index) => {
             return (
               <MapView.Marker
