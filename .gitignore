@@ -4,5 +4,5 @@ npm-debug.*
 *.jks
 *.p12
 *.key
-server/**/*
+/server/node_modules/**/*
 *.mobileprovision
