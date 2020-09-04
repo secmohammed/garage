@@ -35,7 +35,7 @@
     "lodash": "^4.17.19",
     "messenger": "git+https://github.com/HubSpot/messenger.git#v1.4.2",
     "napa": "^3.0.0",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.13.1",
     "nvd3": "1.8.6",
     "rickshaw": "1.6.6",
     "sass-loader": "^7.0.1",
