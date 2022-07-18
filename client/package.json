@@ -30,7 +30,7 @@
     "izitoast": "^1.4.0",
     "jquery": "^3.5.0",
     "jquery-sparkline": "2.4.0",
-    "jquery-ui": "^1.13.0",
+    "jquery-ui": "^1.13.2",
     "line-awesome": "icons8/line-awesome",
     "lodash": "^4.17.21",
     "messenger": "git+https://github.com/HubSpot/messenger.git#v1.4.2",
